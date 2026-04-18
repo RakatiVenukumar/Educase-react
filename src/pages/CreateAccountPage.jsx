@@ -1,5 +1,10 @@
+import PropTypes from "prop-types";
+CreateAccountPage.propTypes = {};
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import InputField from "../components/InputField";
+import Button from "../components/Button";
+import RadioGroup from "../components/RadioGroup";
 
 export default function CreateAccountPage() {
   const navigate = useNavigate();
@@ -12,6 +17,7 @@ export default function CreateAccountPage() {
     isAgency: "yes",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -29,95 +35,95 @@ export default function CreateAccountPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError("");
     if (!isReady || isSubmitting) return;
-
     setIsSubmitting(true);
-
-    await new Promise((r) => setTimeout(r, 800));
-    navigate("/profile");
+    try {
+      await new Promise((r) => setTimeout(r, 800));
+      // Simulate error for demonstration
+      if (!form.email.includes("@")) {
+        throw new Error("Please enter a valid email address.");
+      }
+      navigate("/profile");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="create-page">
       <h1>
-        Create your
-        <br />
-        PopX account
+        Create your<br />PopX account
       </h1>
-
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-        <div className="form-group form-group--floating">
-          <label className="form-label form-label--floating">
-            Full Name<span style={{ color: "#e53e3e" }}>*</span>
-          </label>
-          <input
-            type="text"
-            className="form-input form-input--floating"
-            placeholder="Marry Doe"
-            value={form.fullName}
-            onChange={(e) => handleChange("fullName", e.target.value)}
-          />
-        </div>
-
-        <div className="form-group form-group--floating">
-          <label className="form-label form-label--floating">
-            Phone number<span style={{ color: "#e53e3e" }}>*</span>
-          </label>
-          <input
-            type="tel"
-            className="form-input form-input--floating"
-            placeholder="Marry Doe"
-            value={form.phone}
-            onChange={(e) => handleChange("phone", e.target.value)}
-          />
-        </div>
-
-        <div className="form-group form-group--floating">
-          <label className="form-label form-label--floating">
-            Email address<span style={{ color: "#e53e3e" }}>*</span>
-          </label>
-          <input
-            type="email"
-            className="form-input form-input--floating"
-            placeholder="Marry Doe"
-            value={form.email}
-            onChange={(e) => handleChange("email", e.target.value)}
-          />
-        </div>
-
-        <div className="form-group form-group--floating">
-          <label className="form-label form-label--floating">
-            Password <span style={{ color: "#e53e3e" }}>*</span>
-          </label>
-          <input
-            type="password"
-            className="form-input form-input--floating"
-            placeholder="Marry Doe"
-            value={form.password}
-            onChange={(e) => handleChange("password", e.target.value)}
-          />
-        </div>
-
-        <div className="form-group form-group--floating">
-          <label className="form-label form-label--floating">Company name</label>
-          <input
-            type="text"
-            className="form-input form-input--floating"
-            placeholder="Marry Doe"
-            value={form.company}
-            onChange={(e) => handleChange("company", e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">
-            Are you an Agency?<span style={{ color: "#e53e3e" }}>*</span>
-          </label>
-          <div className="radio-group">
-            {["yes", "no"].map((val) => (
-              <label
-                key={val}
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", flex: 1 }} aria-label="Create account form">
+        <InputField
+          label="Full Name"
+          type="text"
+          value={form.fullName}
+          onChange={(e) => handleChange("fullName", e.target.value)}
+          placeholder="John Doe"
+          required
+          floating
+        />
+        <InputField
+          label="Phone number"
+          type="tel"
+          value={form.phone}
+          onChange={(e) => handleChange("phone", e.target.value)}
+          placeholder="123-456-7890"
+          required
+          floating
+        />
+        <InputField
+          label="Email address"
+          type="email"
+          value={form.email}
+          onChange={(e) => handleChange("email", e.target.value)}
+          placeholder="user@example.com"
+          required
+          floating
+        />
+        <InputField
+          label="Password"
+          type="password"
+          value={form.password}
+          onChange={(e) => handleChange("password", e.target.value)}
+          placeholder="Enter password"
+          required
+          floating
+        />
+        <InputField
+          label="Company name"
+          type="text"
+          value={form.company}
+          onChange={(e) => handleChange("company", e.target.value)}
+          placeholder="Company Inc."
+          floating
+        />
+        <RadioGroup
+          label="Are you an Agency?"
+          options={[
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ]}
+          value={form.isAgency}
+          onChange={(val) => handleChange("isAgency", val)}
+          required
+        />
+        {error && <div style={{ color: "#e53e3e", marginBottom: 8 }}>{error}</div>}
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={!isReady || isSubmitting}
+          loading={isSubmitting}
+          aria-label="Create Account"
+        >
+          {isSubmitting ? "Creating Account..." : "Create Account"}
+        </Button>
+      </form>
+    </div>
                 className="radio-option"
                 onClick={() => handleChange("isAgency", val)}
               >

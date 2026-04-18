@@ -1,19 +1,34 @@
+import PropTypes from "prop-types";
+LoginPage.propTypes = {};
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import InputField from "../components/InputField";
+import Button from "../components/Button";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     if (!isReady || isSubmitting) return;
-
     setIsSubmitting(true);
-    await new Promise((r) => setTimeout(r, 700));
-    navigate("/profile");
+    try {
+      await new Promise((r) => setTimeout(r, 700));
+      // Simulate error for demonstration
+      if (email !== "user@example.com" || password !== "password123") {
+        throw new Error("Invalid email or password.");
+      }
+      navigate("/profile");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const isReady = email.trim() !== "" && password.trim() !== "";
@@ -21,47 +36,41 @@ export default function LoginPage() {
   return (
     <div className="login-page">
       <h1>
-        Signin to your
-        <br />
-        PopX account
+        Sign in to your<br />PopX account
       </h1>
       <p className="subtitle">
-        Lorem ipsum dolor sit amet,
-        <br />
-        consectetur adipiscing elit,
+        Enter your credentials to access your account.
       </p>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group form-group--floating">
-          <label className="form-label form-label--floating">Email Address</label>
-          <input
-            type="email"
-            className="form-input form-input--floating"
-            placeholder="Enter email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="form-group form-group--floating">
-          <label className="form-label form-label--floating">Password</label>
-          <input
-            type="password"
-            className="form-input form-input--floating"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button
+      <form onSubmit={handleSubmit} aria-label="Login form">
+        <InputField
+          label="Email Address"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter email address"
+          required
+          floating
+        />
+        <InputField
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter password"
+          required
+          floating
+        />
+        {error && <div style={{ color: "#e53e3e", marginBottom: 8 }}>{error}</div>}
+        <Button
           type="submit"
-          className="btn-primary"
+          variant="primary"
           disabled={!isReady || isSubmitting}
-          style={{ marginTop: "8px" }}
+          loading={isSubmitting}
+          style={{ marginTop: 8 }}
+          aria-label="Login"
         >
-          <span className="btn-content">
-            {isSubmitting && <span className="btn-spinner" aria-hidden="true" />}
-            {isSubmitting ? "Logging in..." : "Login"}
-          </span>
-        </button>
+          {isSubmitting ? "Logging in..." : "Login"}
+        </Button>
       </form>
     </div>
   );

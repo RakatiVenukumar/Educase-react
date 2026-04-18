@@ -1,5 +1,10 @@
+import PropTypes from "prop-types";
+WelcomePage.propTypes = {};
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/Button";
+import Spinner from "../components/Spinner";
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -18,24 +23,28 @@ export default function WelcomePage() {
       <div className="welcome-content">
         <h1>Welcome to PopX</h1>
         <p>
-          Lorem ipsum dolor sit amet,
-          <br />
-          consectetur adipiscing elit,
+          Experience seamless onboarding and account management.<br />
+          Join us or sign in to continue.
         </p>
-        <button className="btn-primary" disabled={!!loadingTo} onClick={() => go("signup")}>
-          <span className="btn-content btn-content--overlay-right">
-            <span className="btn-text">Create Account</span>
-            {loadingTo === "signup" && <span className="btn-spinner btn-spinner--right" aria-hidden="true" />}
-          </span>
-        </button>
-        <button className="btn-secondary" disabled={!!loadingTo} onClick={() => go("login")}>
-          <span className="btn-content btn-content--overlay-right">
-            <span className="btn-text">Already Registered? Login</span>
-            {loadingTo === "login" && (
-              <span className="btn-spinner btn-spinner--dark btn-spinner--right" aria-hidden="true" />
-            )}
-          </span>
-        </button>
+        <Button
+          variant="primary"
+          disabled={!!loadingTo}
+          loading={loadingTo === "signup"}
+          aria-label="Create Account"
+          onClick={() => go("signup")}
+        >
+          Create Account
+        </Button>
+        <Button
+          variant="secondary"
+          disabled={!!loadingTo}
+          loading={loadingTo === "login"}
+          aria-label="Already Registered? Login"
+          onClick={() => go("login")}
+          style={{ marginTop: 12 }}
+        >
+          Already Registered? Login
+        </Button>
       </div>
     </div>
   );
