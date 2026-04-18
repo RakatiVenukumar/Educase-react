@@ -1,6 +1,17 @@
+
 # PopX App
 
 A pixel-perfect React implementation of the PopX mobile app UI — centered on the webpage like a mobile phone frame.
+
+## Features & Improvements
+
+- Modular, reusable React components (Button, InputField, RadioGroup, Spinner)
+- PropTypes for type safety
+- Error handling and accessibility improvements
+- Modern, responsive UI with plain CSS
+- Ready for deployment on Vercel (SPA routing supported)
+- ESLint and Prettier for code quality
+
 
 ## Screens
 
@@ -15,6 +26,7 @@ A pixel-perfect React implementation of the PopX mobile app UI — centered on t
 - Vite 5
 - Plain CSS (no frameworks)
 
+
 ## Run Locally
 
 ```bash
@@ -24,12 +36,44 @@ npm run dev
 
 Then open http://localhost:3000
 
+
 ## Build for Production
 
 ```bash
 npm run build
 npm run preview
 ```
+
+## Deploy on Vercel
+
+1. Push your code to GitHub.
+2. Connect your repo to Vercel (https://vercel.com/import).
+3. Vercel auto-detects Vite. No extra config needed, but `vercel.json` is included for SPA routing.
+4. Set any environment variables in the Vercel dashboard (see `.env` for example).
+5. Deploy!
+
+## Environment Variables
+
+Create a `.env` file for environment-specific settings:
+
+```
+VITE_API_URL=https://api.example.com
+```
+
+## Linting & Formatting
+
+Run ESLint:
+
+```bash
+npx eslint src
+```
+
+Run Prettier:
+
+```bash
+npx prettier --check .
+```
+
 
 ## Project Structure
 
@@ -51,7 +95,8 @@ popx-app/
 └── package.json
 ```
 
+
 ## Navigation Flow
 
-Welcome → Create Account → Account Settings
+Welcome → Create Account → Account Settings  
 Welcome → Login → Account Settings

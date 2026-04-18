@@ -124,32 +124,5 @@ export default function CreateAccountPage() {
         </Button>
       </form>
     </div>
-                className="radio-option"
-                onClick={() => handleChange("isAgency", val)}
-              >
-                <span className={`radio-circle ${form.isAgency === val ? "selected" : ""}`}>
-                  {form.isAgency === val && <span className="radio-dot" />}
-                </span>
-                {val.charAt(0).toUpperCase() + val.slice(1)}
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <div className="form-flex-spacer" />
-
-        <button
-          type="submit"
-          className="btn-primary"
-          style={{ marginTop: "16px" }}
-          disabled={!isReady || isSubmitting}
-        >
-          <span className="btn-content">
-            {isSubmitting && <span className="btn-spinner" aria-hidden="true" />}
-            {isSubmitting ? "Creating..." : "Create Account"}
-          </span>
-        </button>
-      </form>
-    </div>
   );
 }
